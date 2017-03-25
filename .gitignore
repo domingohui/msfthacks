@@ -1,0 +1,11 @@
+# Thumbnails
+_Store
+*.DS_Store
+._*
+
+# Bot server api secret
+process.env
+
+# node js
+node_modules/
+*.log
