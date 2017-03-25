@@ -1,0 +1,16 @@
+{
+  "name": "msfthacks2017",
+  "version": "1.0.0",
+  "description": "Exploring the Microsoft Bot Framework",
+  "main": "bot.js",
+  "repository": "https://github.com/domingohui/msfthacks.git",
+  "author": "<domingohui@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+      "start": "node bot.js"
+  },
+  "dependencies": {
+    "botbuilder": "^3.7.0",
+    "restify": "^4.3.0"
+  }
+}
