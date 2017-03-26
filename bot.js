@@ -34,8 +34,9 @@ let FIRST_DIALOG = true;
 bot.dialog('/', [
     function (session) {
         if (FIRST_DIALOG) {
-            // Remove prompt image from last session
             session.userData.original = undefined;
+            session.userData.missing_part = undefined;
+            FIRST_DIALOG = false;
         }
         builder.Prompts.choice(session, "Are you an organizer or a participant", "Organizer|Participant");
     },
@@ -55,14 +56,17 @@ bot.dialog('/organizer', [
         builder.Prompts.attachment (session, 'Please upload a photo with missing parts.');
     },
     function ( session, results ) {
+        let missing_part = results.response[0];
+        // Save the image
+        session.userData.missing_part = missing_part;
+        builder.Prompts.attachment (session, 'Please send the original image');
+    },
+    function ( session, results ) {
         let image = results.response[0];
-        // Save the image for participants
+        // Save the image
         session.userData.original = image;
         session.send('Participants can join the game now!');
         session.endDialog();
-
-        // So that the prompt image doesn't get removed
-        FIRST_DIALOG = false;
     }
 ]);
 
@@ -75,7 +79,7 @@ bot.dialog('/participant', [
         else {
             // Show original (the prompt) photo
             let msg = new builder.Message(session).text("Prompt");
-            msg.addAttachment(session.userData.original);
+            msg.addAttachment(session.userData.missing_part);
             bot.send(msg)
             builder.Prompts.attachment (session, 'Find it if you can! Send a photo when you do!');
         }
@@ -94,6 +98,7 @@ function compare_photos (img1, img2, session) {
     let spawn = require('child_process').spawn;
     let process = spawn('./env/bin/python', ['compare_image.py', img1, img2]);
     process.stdout.on('data', function (data){
+        console.log('SIMILARITY: ' + data.toString());
         if ( Number(data.toString()) < 0.4 ) {
             // Not close enough 
             session.send('Please try again');
