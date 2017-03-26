@@ -7,10 +7,12 @@
   "author": "<domingohui@gmail.com>",
   "license": "MIT",
   "scripts": {
-      "start": "node bot.js"
+    "start": "node bot.js"
   },
   "dependencies": {
     "botbuilder": "^3.7.0",
+    "child_process": "^1.0.2",
+    "ffmpeg": "^0.0.4",
     "restify": "^4.3.0"
   }
 }
