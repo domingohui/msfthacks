@@ -24,6 +24,24 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-bot.dialog('/', function (session) {
-    session.send("Hello World");
-});
+bot.dialog('/', 
+    function (session, args, next) {
+        if ( !session.user_data.name) {
+            session.beginDiaglo('/profile');
+        }
+        else {
+            // Has user name
+            session.send("Hello " + session.user_data.name);
+        }
+    }
+);
+
+bot.dialog('/profile',
+    function (session) {
+        builder.Prompts.text(session, "What is your name?");
+    },
+    function (session, results) {
+        session.user_data.name = results.response;
+        session.endDialog();
+    }
+);
