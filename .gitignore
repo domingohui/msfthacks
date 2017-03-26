@@ -9,3 +9,10 @@ process.env
 # node js
 node_modules/
 *.log
+
+*.mp3
+*.mov
+
+# Python
+env/
+*.pyc
